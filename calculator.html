@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horny's Menu Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #3e2723; color: white; }
+        .container { width: 90%; max-width: 1080px; margin: auto; padding: 5px; background: #5d4037; border-radius: 10px; }
+        .category { margin-top: 20px; font-size: 20px; font-weight: bold; border-bottom: 2px solid white; padding-bottom: 5px; }
+        .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .item { display: flex; justify-content: space-between; padding: 5px; align-items: center; }
+        .total { font-size: 24px; margin-top: 10px; }
+        input { width: 50px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="margin-top: 5px;">Horny's Menu Calculator</h1>
+        <div id="menu"></div>
+        <h2 class="total">Total: $<span id="total">0</span></h2>
+    </div>
+
+    <script>
+        const categories = {
+            "Breakfast": [
+                { name: "French Thrust", price: 700 },
+                { name: "Porked French Thrust", price: 700 },
+                { name: "Gush-Pacho", price: 700 },
+                { name: "Morning Wood Sausage", price: 700 },
+                { name: "Pork & Cook on Toast", price: 700 },
+                { name: "Ass Browns", price: 500 },
+                { name: "Eggs Bene-Dicked", price: 1000 }
+            ],
+            "Food": [
+                { name: "Chode Nuggets", price: 500 },
+                { name: "Meaty Mouthful", price: 700 },
+                { name: "Double Stuffed Meaty Mouthful", price: 1000 },
+                { name: "Meaty Mouthful with Extra Pork", price: 900 },
+                { name: "Meaty Mouthful with Warts", price: 900 },
+                { name: "Cocky Mouthful", price: 700 },
+                { name: "Double Penetration Cocky Mouthful", price: 1000 },
+                { name: "Cluck my Buns", price: 700 },
+                { name: "The Pink Taco", price: 700 },
+                { name: "Sloppy Porker", price: 700 },
+                { name: "Tossed Cock Salad", price: 700 }
+            ],
+            "Desserts": [
+                { name: "Frosty Tip", price: 500 },
+                { name: "Blue Balls", price: 700 },
+                { name: "The Layered Load", price: 1000 }
+            ],
+            "Drinks": [
+                { name: "Golden Shower", price: 1000 },
+                { name: "Orgy O Tang", price: 1000 },
+                { name: "Junk", price: 1000 }
+            ],
+            "Combos": [
+                { name: "The Backdoor Special", price: 6000 },
+                { name: "Morning Groan", price: 6000 },
+                { name: "Sticky Surprise", price: 6000 },
+                { name: "Meat Stack", price: 6000 },
+                { name: "THE GIRTHQUAKE", price: 250000 }
+            ]
+        };
+        
+        const menuContainer = document.getElementById("menu");
+        const totalDisplay = document.getElementById("total");
+        let total = 0;
+        let quantities = {};
+        
+        function updateTotal() {
+            total = Object.keys(quantities).reduce((sum, item) => sum + quantities[item] * categories[item.split('-')[0]].find(x => x.name === item.split('-')[1]).price, 0);
+            totalDisplay.textContent = total;
+        }
+        
+        Object.keys(categories).forEach(category => {
+            const categoryDiv = document.createElement("div");
+            categoryDiv.classList.add("category");
+            categoryDiv.textContent = category;
+            menuContainer.appendChild(categoryDiv);
+            
+            categories[category].forEach(item => {
+                const div = document.createElement("div");
+                div.classList.add("item");
+                div.innerHTML = `
+                    <span>${item.name} - $${item.price}</span>
+                    <input type="number" min="0" value="0" id="${category}-${item.name}" onchange="updateQuantity('${category}-${item.name}', this.value)">
+                `;
+                menuContainer.appendChild(div);
+            });
+        });
+        
+        function updateQuantity(item, value) {
+            quantities[item] = parseInt(value) || 0;
+            updateTotal();
+        }
+    </script>
+</body>
+</html>
