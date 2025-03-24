@@ -1,100 +1,735 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horny's Menu Calculator</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #3e2723; color: white; }
-        .container { width: 90%; max-width: 1080px; margin: auto; padding: 5px; background: #5d4037; border-radius: 10px; }
-        .category { margin-top: 20px; font-size: 20px; font-weight: bold; border-bottom: 2px solid white; padding-bottom: 5px; }
-        .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .item { display: flex; justify-content: space-between; padding: 5px; align-items: center; }
-        .total { font-size: 24px; margin-top: 10px; }
-        input { width: 50px; text-align: center; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Horny's Fast Food Order System</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #3E260E; /* Dark brown */
+      color: #FFD700; /* Gold */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    
+    .section {
+      background-color: #5A3E1B; /* Medium brown */
+      padding: 20px;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    #orderSection {
+      flex: 2;
+    }
+    
+    #summarySection {
+      flex: 1;
+    }
+    
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      color: #FFD700;
+      margin-top: 20px;
+    }
+    
+    h2,
+    h3 {
+      color: #FFC107;
+      border-bottom: 2px solid #FFD700;
+      padding-bottom: 5px;
+    }
+    
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+    
+    .menu-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .menu-button {
+      background-color: #C17D3A;
+      color: #FFF;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .menu-button:hover {
+      background-color: #A66A2C;
+    }
+    
+    .quantity-input {
+      width: 50px;
+      text-align: center;
+      padding: 5px;
+      margin-top: 5px;
+      border-radius: 5px;
+    }
+    
+    .remove-button {
+      background-color: #D9534F;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-left: 10px;
+    }
+    
+    .remove-button:hover {
+      background-color: #C9302C;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1 style="margin-top: 5px;">Horny's Menu Calculator</h1>
-        <div id="menu"></div>
-        <h2 class="total">Total: $<span id="total">0</span></h2>
+  <h1>Horny's Fast Food Order System</h1>
+  <div class="container">
+    <div class="section" id="orderSection">
+      <h2>Menu</h2>
+      <h3>Breakfast Items</h3>
+      <div class="menu-grid" id="breakfast-menu"></div>
+      <h3>Main Food Items</h3>
+      <div class="menu-grid" id="food-menu"></div>
+      <h3>Desserts</h3>
+      <div class="menu-grid" id="dessert-menu"></div>
+      <h3>Drinks</h3>
+      <div class="menu-grid" id="drink-menu"></div>
+      <h3>Combos</h3>
+      <div class="menu-grid" id="combo-menu"></div>
     </div>
-
-    <script>
-        const categories = {
-            "Breakfast": [
-                { name: "French Thrust", price: 700 },
-                { name: "Porked French Thrust", price: 700 },
-                { name: "Gush-Pacho", price: 700 },
-                { name: "Morning Wood Sausage", price: 700 },
-                { name: "Pork & Cook on Toast", price: 700 },
-                { name: "Ass Browns", price: 500 },
-                { name: "Eggs Bene-Dicked", price: 1000 }
-            ],
-            "Food": [
-                { name: "Chode Nuggets", price: 500 },
-                { name: "Meaty Mouthful", price: 700 },
-                { name: "Double Stuffed Meaty Mouthful", price: 1000 },
-                { name: "Meaty Mouthful with Extra Pork", price: 900 },
-                { name: "Meaty Mouthful with Warts", price: 900 },
-                { name: "Cocky Mouthful", price: 700 },
-                { name: "Double Penetration Cocky Mouthful", price: 1000 },
-                { name: "Cluck my Buns", price: 700 },
-                { name: "The Pink Taco", price: 700 },
-                { name: "Sloppy Porker", price: 700 },
-                { name: "Tossed Cock Salad", price: 700 }
-            ],
-            "Desserts": [
-                { name: "Frosty Tip", price: 500 },
-                { name: "Blue Balls", price: 700 },
-                { name: "The Layered Load", price: 1000 }
-            ],
-            "Drinks": [
-                { name: "Golden Shower", price: 1000 },
-                { name: "Orgy O Tang", price: 1000 },
-                { name: "Junk", price: 1000 }
-            ],
-            "Combos": [
-                { name: "The Backdoor Special", price: 6000 },
-                { name: "Morning Groan", price: 6000 },
-                { name: "Sticky Surprise", price: 6000 },
-                { name: "Meat Stack", price: 6000 },
-                { name: "THE GIRTHQUAKE", price: 250000 }
-            ]
+    
+    <div class="section" id="summarySection">
+      <h2>Order Summary</h2>
+      <div id="orderSummary"></div>
+    </div>
+  </div>
+  
+  <script>
+    // Global order object and totalPrice variable.
+    let order = {};
+    let totalPrice = 0;
+    
+    // Prices for menu items.
+    const menuItems = {
+      french_thrust: { price: 700 },
+      porked_french_thrust: { price: 700 },
+      gush_pacho: { price: 700 },
+      morning_wood_sausage: { price: 700 },
+      pork_and_cock_on_toast: { price: 700 },
+      ass_browns: { price: 500 },
+      eggs_bene_dicked: { price: 1000 },
+      chode_nuggets: { price: 500 },
+      meaty_mouthful: { price: 700 },
+      double_stuffed_meaty_mouthful: { price: 1000 },
+      meaty_mouthful_extra_pork: { price: 900 },
+      meaty_mouthful_warts: { price: 900 },
+      cocky_mouthful: { price: 700 },
+      double_pen_cocky_mouthful: { price: 1000 },
+      pink_taco: { price: 700 },
+      sloppy_porker: { price: 700 },
+      tossed_cock_salad: { price: 700 },
+      frosty_tip: { price: 500 },
+      blue_balls: { price: 700 },
+      layered_load: { price: 1000 },
+      golden_shower: { price: 1000 },
+      orgy_o_tang: { price: 1000 },
+      junk: { price: 1000 },
+      the_meat_stack: { price: 6000 },
+      sticky_surprise: { price: 6000 },
+      backdoor_special: { price: 6000 },
+      the_girthquake: { price: 250000 },
+      the_morning_groan: { price: 6000 }
+    };
+    
+    // Combo contents – update quantities here.
+    const comboContents = {
+      the_meat_stack: [
+        "Double Stuffed Meaty Mouthful x5",
+        "Blue Balls x5",
+        "Junk x5"
+      ],
+      the_morning_groan: [
+        "Eggs Bene-Dicked x5",
+        "Frosty Tip x5",
+        "Golden Shower x5"
+      ],
+      sticky_surprise: [
+        "Sloppy Porker x5",
+        "Layered Load x5",
+        "Orgy O Tang x5"
+      ],
+      backdoor_special: [
+        "Pink Taco x5",
+        "Layered Load x5",
+        "Junk x5"
+      ],
+      the_girthquake: [
+        [
+          "Pink Taco x20",
+          "Double Pen Cocky Mouthful x20",
+          "Meaty Mouthful x15",
+          "Double Stuffed Meaty Mouthful x15",
+          "Sloppy Porker x10",
+          "Eggs Bene-Dicked x10",
+          "Tossed Cock Salad x5",
+          "Ass Browns x5"
+        ],
+        [
+          "Frosty Tip x20",
+          "Blue Balls x15",
+          "Layered Load x15"
+        ],
+        [
+          "Junk x50",
+          "Golden Shower x30",
+          "Orgy O Tang x20"
+        ]
+      ]
+    };
+    
+    const categories = {
+      breakfast: [
+        "french_thrust",
+        "porked_french_thrust",
+        "gush_pacho",
+        "morning_wood_sausage",
+        "pork_and_cock_on_toast",
+        "ass_browns",
+        "eggs_bene_dicked"
+      ],
+      food: [
+        "chode_nuggets",
+        "meaty_mouthful",
+        "double_stuffed_meaty_mouthful",
+        "meaty_mouthful_extra_pork",
+        "meaty_mouthful_warts",
+        "cocky_mouthful",
+        "double_pen_cocky_mouthful",
+        "pink_taco",
+        "sloppy_porker",
+        "tossed_cock_salad"
+      ],
+      dessert: ["frosty_tip", "blue_balls", "layered_load"],
+      drink: ["golden_shower", "orgy_o_tang", "junk"],
+      combo: [
+        "the_meat_stack",
+        "sticky_surprise",
+        "backdoor_special",
+        "the_girthquake",
+        "the_morning_groan"
+      ]
+    };
+    
+    /* Multi-step recipes.
+       Each recipe has a "steps" array.
+       Each step includes:
+         - input: object mapping ingredient(s) to quantity
+         - station: the station processing that step
+         - output: product produced at that step
+    */
+    const recipes = {
+      french_thrust: {
+        steps: [
+          { input: { egg: 1, breadSlice: 2 }, station: "Chopping Board", output: "French Thrust" }
+        ]
+      },
+      porked_french_thrust: {
+        steps: [
+          { input: { rawBacon: 1 }, station: "Grill", output: "Bacon" },
+          { input: { egg: 1, Bacon: 1, breadSlice: 2 }, station: "Chopping Board", output: "Porked French Thrust" }
+        ]
+      },
+      eggs_bene_dicked: {
+        steps: [
+          { input: { egg: 2 }, station: "Grill", output: "Eggs Bene-Dicked" }
+        ]
+      },
+      gush_pacho: {
+        steps: [
+          { input: { tomato: 1 }, station: "Chopping Board", output: "Gush Pacho" }
+        ]
+      },
+      morning_wood_sausage: {
+        steps: [
+          { input: { rawSausages: 1 }, station: "Grill", output: "Sausages" },
+          { input: { Sausages: 1 }, station: "Prep Station", output: "Morning Wood Sausage" }
+        ]
+      },
+      pink_taco: {
+        steps: [
+          { input: { chickenBreast: 1 }, station: "Deep Fryer", output: "Chicken Fillet" },
+          { input: { breadSlice: 1, ChickenFillet: 1 }, station: "Prep Station", output: "Pink Taco" }
+        ]
+      },
+      meaty_mouthful: {
+        steps: [
+          { input: { burgerPatty: 1 }, station: "Grill", output: "burgerMeat" },
+          { input: { cheddarSlice: 1, burgerBun: 1, burgerMeat: 1, lettuce: 1 }, station: "Prep Station", output: "Meaty Mouthful" }
+        ]
+      },
+      double_stuffed_meaty_mouthful: {
+        steps: [
+          { input: { burgerPatty: 2 }, station: "Grill", output: "burgerMeat" },
+          { input: { cheddarSlice: 1, burgerBun: 1, burgerMeat: 2, lettuce: 1 }, station: "Prep Station", output: "Double Stuffed Meaty Mouthful" }
+        ]
+      },
+      meaty_mouthful_extra_pork: {
+        steps: [
+          { input: { burgerPatty: 1 }, station: "Grill", output: "burgerMeat" },
+          { input: { rawBacon: 1 }, station: "Grill", output: "Bacon" },
+          { input: { cheddarSlice: 1, burgerBun: 1, burgerMeat: 1, Bacon: 1 }, station: "Prep Station", output: "Meaty Mouthful Extra Pork" }
+        ]
+      },
+      meaty_mouthful_warts: {
+        steps: [
+          { input: { burgerPatty: 1 }, station: "Grill", output: "burgerMeat" },
+          { input: { cheddarSlice: 1, burgerBun: 1, burgerMeat: 1, pickle: 1 }, station: "Prep Station", output: "Meaty Mouthful with Warts" }
+        ]
+      },
+      cocky_mouthful: {
+        steps: [
+          { input: { chickenBreast: 1 }, station: "Deep Fryer", output: "Chicken Fillet" },
+          { input: { ChickenFillet: 1, burgerBun: 1, lettuce: 1 }, station: "Prep Station", output: "Cocky Mouthful" }
+        ]
+      },
+      double_pen_cocky_mouthful: {
+        steps: [
+          { input: { chickenBreast: 2 }, station: "Deep Fryer", output: "Chicken Fillet" },
+          { input: { ChickenFillet: 2, burgerBun: 1, lettuce: 1 }, station: "Prep Station", output: "Double Pen Cocky Mouthful" }
+        ]
+      },
+      chode_nuggets: {
+        steps: [
+          { input: { chickenBreast: 1 }, station: "Deep Fryer", output: "Chicken Fillet" },
+          { input: { ChickenFillet: 1 }, station: "Deep Fryer", output: "Chode Nuggets" }
+        ]
+      },
+      pork_and_cock_on_toast: {
+        steps: [
+          { input: { rawBacon: 1 }, station: "Grill", output: "Bacon" },
+          { input: { egg: 1, Bacon: 1, breadSlice: 2 }, station: "Prep Station", output: "Pork and Cock on Toast" }
+        ]
+      },
+      ass_browns: {
+        steps: [
+          { input: { potato: 1 }, station: "Chopping Board", output: "SlicedPotatoes" },
+          { input: { SlicedPotatoes: 1 }, station: "Deep Fryer", output: "Ass Browns" }
+        ]
+      },
+      tossed_cock_salad: {
+        steps: [
+          { input: { chickenBreast: 1, lettuce: 1 }, station: "Chopping Board", output: "Tossed Cock Salad" }
+        ]
+      },
+      sloppy_porker: {
+        steps: [
+          { input: { rawBacon: 1 }, station: "Grill", output: "Bacon" },
+          { input: { burgerBun: 1, Bacon: 1 }, station: "Prep Station", output: "Sloppy Porker" }
+        ]
+      }
+    };
+    
+    // Set of raw ingredients available.
+    const rawIngredientsSet = new Set([
+      "egg",
+      "breadSlice",
+      "rawSausages",
+      "tomato",
+      "chickenBreast",
+      "burgerBun",
+      "burgerPatty",
+      "rawBacon",
+      "cheddarSlice",
+      "lettuce",
+      "pickle",
+      "potato"
+    ]);
+    
+    // Helper: converts a display name to a recipe key.
+    function unformatText(text) {
+      return text.replace(/\s+/g, '_').toLowerCase();
+    }
+    
+    // Renders menu items.
+    function renderMenu(category, containerId) {
+      const container = document.getElementById(containerId);
+      categories[category].forEach(item => {
+        let itemContainer = document.createElement("div");
+        itemContainer.classList.add("menu-item");
+        let quantityInput = document.createElement("input");
+        quantityInput.type = "number";
+        quantityInput.value = 1;
+        quantityInput.min = 1;
+        quantityInput.classList.add("quantity-input");
+        let button = document.createElement("button");
+        button.classList.add("menu-button");
+        button.innerText = formatText(item);
+        button.onclick = () => {
+          let qty = parseInt(quantityInput.value);
+          if (!isNaN(qty) && qty > 0) {
+            addToOrder(item, qty);
+          }
         };
-        
-        const menuContainer = document.getElementById("menu");
-        const totalDisplay = document.getElementById("total");
-        let total = 0;
-        let quantities = {};
-        
-        function updateTotal() {
-            total = Object.keys(quantities).reduce((sum, item) => sum + quantities[item] * categories[item.split('-')[0]].find(x => x.name === item.split('-')[1]).price, 0);
-            totalDisplay.textContent = total;
-        }
-        
-        Object.keys(categories).forEach(category => {
-            const categoryDiv = document.createElement("div");
-            categoryDiv.classList.add("category");
-            categoryDiv.textContent = category;
-            menuContainer.appendChild(categoryDiv);
-            
-            categories[category].forEach(item => {
-                const div = document.createElement("div");
-                div.classList.add("item");
-                div.innerHTML = `
-                    <span>${item.name} - $${item.price}</span>
-                    <input type="number" min="0" value="0" id="${category}-${item.name}" onchange="updateQuantity('${category}-${item.name}', this.value)">
-                `;
-                menuContainer.appendChild(div);
+        itemContainer.appendChild(quantityInput);
+        itemContainer.appendChild(button);
+        container.appendChild(itemContainer);
+      });
+    }
+    
+    function addToOrder(item, quantity) {
+      if (!order[item]) {
+        order[item] = 0;
+      }
+      order[item] += quantity;
+      updateSummary();
+    }
+    
+    function removeFromOrder(item) {
+      if (order[item]) {
+        delete order[item];
+        updateSummary();
+      }
+    }
+    
+    // Formats text (so "burgerMeat" becomes "Burger Meat").
+    function formatText(text) {
+      return text
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+    
+    // Helper: aggregates all raw ingredients needed.
+    function getAggregatedIngredientsForOrder() {
+      let aggregatedIngredients = {};
+      Object.entries(order).forEach(([key, quantity]) => {
+        if (!menuItems[key]) return;
+        if (!categories.combo.includes(key)) {
+          if (recipes[key]) {
+            recipes[key].steps.forEach(step => {
+              for (let ing in step.input) {
+                if (rawIngredientsSet.has(ing)) {
+                  let reqQty = step.input[ing] * quantity;
+                  aggregatedIngredients[ing] = (aggregatedIngredients[ing] || 0) + reqQty;
+                }
+              }
             });
-        });
-        
-        function updateQuantity(item, value) {
-            quantities[item] = parseInt(value) || 0;
-            updateTotal();
+          }
+        } else {
+          let comboData = comboContents[key];
+          const processSubItem = function(subItemString) {
+            let parts = subItemString.split(" x");
+            if (parts.length !== 2) return;
+            let subItemDisplay = parts[0].trim();
+            let multiplier = parseInt(parts[1].trim());
+            if (isNaN(multiplier)) return;
+            let totalMultiplier = multiplier * quantity;
+            let recipeKey = unformatText(subItemDisplay);
+            if (recipes[recipeKey]) {
+              recipes[recipeKey].steps.forEach(step => {
+                for (let ing in step.input) {
+                  if (rawIngredientsSet.has(ing)) {
+                    let reqQty = step.input[ing] * totalMultiplier;
+                    aggregatedIngredients[ing] = (aggregatedIngredients[ing] || 0) + reqQty;
+                  }
+                }
+              });
+            }
+          };
+          if (Array.isArray(comboData[0])) {
+            comboData.forEach(group => group.forEach(processSubItem));
+          } else {
+            comboData.forEach(processSubItem);
+          }
         }
-    </script>
+      });
+      return aggregatedIngredients;
+    }
+    
+    // Builds structure of tasks grouped by recipe step and station.
+    function getOptimizedSteps() {
+      let stepsByIndex = {};
+      Object.entries(order).forEach(([key, quantity]) => {
+        if (!menuItems[key]) return;
+        if (!categories.combo.includes(key)) {
+          let rec = recipes[key];
+          if (rec) {
+            rec.steps.forEach((step, index) => {
+              if (!stepsByIndex[index]) stepsByIndex[index] = {};
+              if (!stepsByIndex[index][step.station]) {
+                stepsByIndex[index][step.station] = [];
+              }
+              stepsByIndex[index][step.station].push({
+                recipe: key,
+                description: step.output,
+                quantity: quantity,
+                input: step.input
+              });
+            });
+          }
+        } else {
+          let comboData = comboContents[key];
+          const processSubItemForSteps = function(subItemString) {
+            let parts = subItemString.split(" x");
+            if (parts.length !== 2) return;
+            let subItemDisplay = parts[0].trim();
+            let multiplier = parseInt(parts[1].trim());
+            if (isNaN(multiplier)) return;
+            let totalMultiplier = multiplier * quantity;
+            let recipeKey = unformatText(subItemDisplay);
+            if (recipes[recipeKey]) {
+              recipes[recipeKey].steps.forEach((step, index) => {
+                if (!stepsByIndex[index]) stepsByIndex[index] = {};
+                if (!stepsByIndex[index][step.station]) {
+                  stepsByIndex[index][step.station] = [];
+                }
+                stepsByIndex[index][step.station].push({
+                  recipe: recipeKey,
+                  description: step.output,
+                  quantity: totalMultiplier,
+                  input: step.input
+                });
+              });
+            }
+          };
+          if (Array.isArray(comboData[0])) {
+            comboData.forEach(group => group.forEach(processSubItemForSteps));
+          } else {
+            comboData.forEach(processSubItemForSteps);
+          }
+        }
+      });
+      return stepsByIndex;
+    }
+    
+    // New helper: aggregates dessert and drink items from both direct orders and combos.
+    function getAdditionalDessertAndDrinkItems() {
+      let desserts = {};
+      let drinks = {};
+      Object.entries(order).forEach(([key, quantity]) => {
+        // Direct orders.
+        if (categories.dessert.includes(key)) {
+          desserts[key] = (desserts[key] || 0) + quantity;
+        }
+        if (categories.drink.includes(key)) {
+          drinks[key] = (drinks[key] || 0) + quantity;
+        }
+        // For combo orders.
+        if (categories.combo.includes(key)) {
+          let comboData = comboContents[key];
+          const processSubItem = function(subItemString) {
+            let parts = subItemString.split(" x");
+            if (parts.length !== 2) return;
+            let subItemDisplay = parts[0].trim();
+            let multiplier = parseInt(parts[1].trim());
+            if (isNaN(multiplier)) return;
+            let totalMultiplier = multiplier * quantity;
+            let recipeKey = unformatText(subItemDisplay);
+            // Check if the sub-item belongs to dessert or drink category.
+            if (categories.dessert.includes(recipeKey)) {
+              desserts[recipeKey] = (desserts[recipeKey] || 0) + totalMultiplier;
+            }
+            if (categories.drink.includes(recipeKey)) {
+              drinks[recipeKey] = (drinks[recipeKey] || 0) + totalMultiplier;
+            }
+          };
+          if (Array.isArray(comboData[0])) {
+            comboData.forEach(group => group.forEach(processSubItem));
+          } else {
+            comboData.forEach(processSubItem);
+          }
+        }
+      });
+      return { desserts, drinks };
+    }
+    
+    // Builds the Optimized Cooking Steps section.
+    function showOptimizedCookingSteps() {
+      let container = document.createElement("div");
+      // Header.
+      let header = document.createElement("h3");
+      header.innerText = "Optimized Cooking Steps:";
+      container.appendChild(header);
+      
+      // Phase: Get Ingredients.
+      let ingredientsPhase = document.createElement("div");
+      ingredientsPhase.style.marginBottom = "10px";
+      let ingHeader = document.createElement("strong");
+      ingHeader.innerText = "Get Ingredients: ";
+      ingredientsPhase.appendChild(ingHeader);
+      let aggregatedIngredients = getAggregatedIngredientsForOrder();
+      let ingText = Object.entries(aggregatedIngredients)
+        .map(([ing, qty]) => `${formatText(ing)} x${qty}`)
+        .join("<br>");
+      let ingSpan = document.createElement("div");
+      ingSpan.innerHTML = ingText;
+      ingredientsPhase.appendChild(ingSpan);
+      container.appendChild(ingredientsPhase);
+      
+      // Cooking phases.
+      const stepsByIndex = getOptimizedSteps();
+      const stepIndices = Object.keys(stepsByIndex)
+        .map(i => parseInt(i))
+        .sort((a, b) => a - b);
+      if (stepIndices.length > 0) {
+        stepIndices.forEach(phase => {
+          let phaseDiv = document.createElement("div");
+          phaseDiv.style.marginBottom = "10px";
+          let phaseHeader = document.createElement("strong");
+          phaseHeader.innerText = `Phase ${phase + 1}: `;
+          phaseDiv.appendChild(phaseHeader);
+          Object.entries(stepsByIndex[phase]).forEach(([station, tasks]) => {
+            let stationDiv = document.createElement("div");
+            stationDiv.style.marginLeft = "20px";
+            let aggregated = {};
+            tasks.forEach(task => {
+              let key = task.description;
+              aggregated[key] = (aggregated[key] || 0) + task.quantity;
+            });
+            let tasksText = Object.entries(aggregated)
+              .map(([desc, qty]) => `${formatText(desc)} x${qty}`)
+              .join("<br>");
+            stationDiv.innerHTML = `${station}: <br>${tasksText}`;
+            phaseDiv.appendChild(stationDiv);
+          });
+          container.appendChild(phaseDiv);
+        });
+      }
+      
+      // Additional phases: Desserts and Drinks.
+      let additional = getAdditionalDessertAndDrinkItems();
+      
+      if (Object.keys(additional.desserts).length > 0) {
+        let dessertPhase = document.createElement("div");
+        dessertPhase.style.marginBottom = "10px";
+        let dessertHeader = document.createElement("strong");
+        dessertHeader.innerText = "Dessert: ";
+        dessertPhase.appendChild(dessertHeader);
+        let dessertText = Object.entries(additional.desserts)
+          .map(([item, qty]) => `${formatText(item)} x${qty}`)
+          .join("<br>");
+        let dessertSpan = document.createElement("div");
+        dessertSpan.innerHTML = dessertText;
+        dessertPhase.appendChild(dessertSpan);
+        container.appendChild(dessertPhase);
+      }
+      
+      if (Object.keys(additional.drinks).length > 0) {
+        let drinkPhase = document.createElement("div");
+        drinkPhase.style.marginBottom = "10px";
+        let drinkHeader = document.createElement("strong");
+        drinkHeader.innerText = "Drink: ";
+        drinkPhase.appendChild(drinkHeader);
+        let drinkText = Object.entries(additional.drinks)
+          .map(([item, qty]) => `${formatText(item)} x${qty}`)
+          .join("<br>");
+        let drinkSpan = document.createElement("div");
+        drinkSpan.innerHTML = drinkText;
+        drinkPhase.appendChild(drinkSpan);
+        container.appendChild(drinkPhase);
+      }
+      
+      return container;
+    }
+    
+    // Update Summary: Displays order items and the live Optimized Cooking Steps.
+    function updateSummary() {
+      const orderSummaryDiv = document.getElementById("orderSummary");
+      orderSummaryDiv.innerHTML = "";
+      totalPrice = 0;
+      
+      // Order Items.
+      let itemsContainer = document.createElement("div");
+      let itemsHeader = document.createElement("h3");
+      itemsHeader.innerText = "Order Items:";
+      itemsContainer.appendChild(itemsHeader);
+      
+      Object.entries(order).forEach(([key, quantity]) => {
+        if (menuItems[key]) {
+          totalPrice += menuItems[key].price * quantity;
+          let itemLine = document.createElement("div");
+          let itemSpan = document.createElement("span");
+          itemSpan.innerText = `${formatText(key)} x${quantity}`;
+          itemLine.appendChild(itemSpan);
+          
+          let removeButton = document.createElement("button");
+          removeButton.innerText = "Remove";
+          removeButton.classList.add("remove-button");
+          removeButton.onclick = () => removeFromOrder(key);
+          itemLine.appendChild(removeButton);
+          
+          itemsContainer.appendChild(itemLine);
+          
+          // If combo, show sub-items.
+          if (categories.combo.includes(key)) {
+            let nestedContainer = document.createElement("div");
+            let comboData = comboContents[key];
+            const processSubItem = function(subItemString) {
+              let parts = subItemString.split(" x");
+              if (parts.length !== 2) return;
+              let subItemDisplay = parts[0].trim();
+              let multiplier = parseInt(parts[1].trim());
+              if (isNaN(multiplier)) return;
+              let totalMultiplier = multiplier * quantity;
+              let subItemLine = document.createElement("div");
+              subItemLine.innerText = `${formatText(unformatText(subItemDisplay))} x${totalMultiplier}`;
+              subItemLine.style.marginLeft = "20px";
+              nestedContainer.appendChild(subItemLine);
+            };
+            if (Array.isArray(comboData[0])) {
+              comboData.forEach(group => group.forEach(processSubItem));
+            } else {
+              comboData.forEach(processSubItem);
+            }
+            itemsContainer.appendChild(nestedContainer);
+          }
+        }
+      });
+      
+      let totalPriceDiv = document.createElement("div");
+      totalPriceDiv.innerText = `Total Price: $${totalPrice}`;
+      orderSummaryDiv.appendChild(totalPriceDiv);
+      orderSummaryDiv.appendChild(itemsContainer);
+      
+      // Append the live Optimized Cooking Steps.
+      let optimizedSteps = showOptimizedCookingSteps();
+      orderSummaryDiv.appendChild(optimizedSteps);
+    }
+    
+    window.onload = function () {
+      Object.keys(categories).forEach(category => {
+        renderMenu(category, `${category}-menu`);
+      });
+    };
+  </script>
 </body>
 </html>
